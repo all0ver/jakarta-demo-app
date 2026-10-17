@@ -16,7 +16,8 @@ class NoteTest {
 
     @Test
     void validNoteIsAccepted() {
-        assertDoesNotThrow(() -> note("Zakupy").validate());
+        // CELOWO ZEPSUTY test (sprawdzenie fail-fast w pipeline); poprawny: assertDoesNotThrow
+        assertThrows(IllegalArgumentException.class, () -> note("Zakupy").validate());
     }
 
     @Test
