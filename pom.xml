@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Wspolrzedne projektu: identyfikuja artefakt w Mavenie -->
+    <groupId>io.github.all0ver</groupId>
+    <artifactId>jakarta-demo-app</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <!-- war = aplikacja webowa do wdrozenia na serwerze aplikacyjnym (Payara) -->
+    <packaging>war</packaging>
+
+    <properties>
+        <!-- Kodowanie zrodel; bez tego wynik buildu zalezy od ustawien systemu -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Java 21 = ta sama wersja co JVM w obrazie Payary (patrz docs/wersje.md w repo srodowiska) -->
+        <maven.compiler.release>21</maven.compiler.release>
+    </properties>
+
+    <dependencies>
+        <!-- API Jakarta EE (JAX-RS, JPA, CDI itd.).
+             scope provided: potrzebne do kompilacji, ale w czasie dzialania
+             dostarcza je serwer Payara, wiec nie pakujemy ich do WAR-a. -->
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>11.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Biblioteka testow jednostkowych. scope test: tylko na czas testow,
+             nie trafia do WAR-a. Wybor biblioteki to sprawa projektu aplikacji,
+             nie srodowiska - srodowisko uruchamia tylko "mvn verify". -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- Nazwa pliku WAR = kontekst aplikacji w adresie (np. /demo/api/notes) -->
+        <finalName>demo</finalName>
+        <plugins>
+            <!-- Pluginy z przypietymi wersjami, zeby build byl powtarzalny -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+            </plugin>
+            <plugin>
+                <!-- Uruchamia testy jednostkowe w fazie "test" (czesc "mvn verify").
+                     Nieudany test przerywa build (fail-fast). -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <!-- Aplikacja nie ma web.xml (JAX-RS konfigurowane adnotacjami) -->
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

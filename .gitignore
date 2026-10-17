@@ -1,0 +1,10 @@
+# Wyniki kompilacji Mavena
+target/
+
+# Pliki IDE
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
