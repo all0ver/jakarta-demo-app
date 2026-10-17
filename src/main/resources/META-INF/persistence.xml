@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <!-- JTA = transakcjami zarzadza serwer aplikacyjny -->
+    <persistence-unit name="demoPU" transaction-type="JTA">
+
+        <!-- Jedyna informacja o bazie w aplikacji: nazwa zasobu JNDI.
+             Host, port, haslo i rodzaj bazy sa skonfigurowane w srodowisku
+             (pula internal-maria w Payarze). -->
+        <jta-data-source>jdbc/maria</jta-data-source>
+
+        <!-- Klasy encji wykrywane automatycznie w archiwum -->
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+
+        <properties>
+            <!-- Tabele sa tworzone przy wdrozeniu, a przy ponownym wdrozeniu
+                 usuwane i tworzone od nowa (dane demo nie sa trwale) -->
+            <property name="jakarta.persistence.schema-generation.database.action"
+                      value="drop-and-create"/>
+        </properties>
+    </persistence-unit>
+</persistence>
